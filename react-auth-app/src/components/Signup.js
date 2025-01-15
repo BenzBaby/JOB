@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
   display: flex;
@@ -11,18 +12,19 @@ const Container = styled.div`
 
 const FormContainer = styled.div`
   background-color: #fff;
-  padding: 40px;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 30px; /* Reduced padding for a smaller height */
+  border-radius: 20px;
+  width: 350px; /* Increased width for the form container */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 `;
 
 const Title = styled.h2`
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 20px; /* Adjusted spacing */
 `;
 
 const InputContainer = styled.div`
-  margin-bottom: 20px;
+  margin-bottom: 15px; /* Adjusted spacing */
 `;
 
 const Label = styled.label`
@@ -32,28 +34,48 @@ const Label = styled.label`
 `;
 
 const Input = styled.input`
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
+  width: 95%; /* Inputs remain full width */
+  padding: 8px; /* Reduced padding for smaller height */
+  border: ${props => (props.error ? '1px solid red' : '1px solid #ccc')};
+  border-radius: 15px;
   margin-top: 5px;
-  border: ${props => (props.error ? '1px solid red' : '1px solid #ccc')}; 
 `;
 
 const Button = styled.button`
   background-color: #007bff;
   color: #fff;
-  padding: 10px 20px;
+  padding: 10px; /* Slightly smaller padding for buttons */
   border: none;
-  border-radius: 3px;
+  border-radius: 15px;
   cursor: pointer;
   width: 100%;
+  transition: background-color 0.3s ease;
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
+
+const SecondaryButton = styled.button`
+  background-color: #f8f9fa;
+  color:rgb(255, 255, 255);
+  padding: 10px;
+  border: 1px solid #007bff;
+  border-radius: 15px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  &:hover {
+    background-color: #007bff;
+    color: #fff;
+  }
 `;
 
 const Error = styled.p`
   color: red;
   margin-top: 10px;
 `;
+
 
 function Signup() {
   const [firstName, setFirstName] = useState('');
@@ -62,6 +84,7 @@ function Signup() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/; 
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/; 
@@ -86,7 +109,7 @@ function Signup() {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/signup', {
+      const response = await fetch('http://localhost:5001/api/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ firstName, lastName, email, password }),
@@ -161,6 +184,10 @@ function Signup() {
           </InputContainer>
           <Button type="submit">Signup</Button>
         </form>
+        <center>or</center>
+        <SecondaryButton onClick={() => navigate('/Login')}>
+          Login
+        </SecondaryButton>
       </FormContainer>
     </Container>
   );
